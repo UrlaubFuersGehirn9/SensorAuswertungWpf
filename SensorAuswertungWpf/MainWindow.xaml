@@ -63,6 +63,9 @@
                     <DataGridTextColumn Binding="{Binding Timestamp}" Header="Datum" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <ListBox x:Name="lbStatistik" Grid.Column="1">
+                
+            </ListBox>
         </Grid>
     </Grid>
 </Window>

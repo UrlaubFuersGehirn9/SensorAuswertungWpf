@@ -16,7 +16,7 @@ namespace SensorAuswertungWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Value> values = new List<Value>();
+        public List<Value> values = [];
         public MainWindow()
         {
             InitializeComponent();
@@ -29,10 +29,10 @@ namespace SensorAuswertungWpf
             int Seed = Convert.ToInt32(txtSeed.Text);
             int maxSensor = Convert.ToInt32(txtSeed.Text);
             int maxWert = Convert.ToInt32(txtWertMax.Text);
-            Random random = new Random(Seed);
-            for(int i = 0; i < nWerte; i++)
+            Random random = new(Seed);
+            for (int i = 0; i < nWerte; i++)
             {
-                Value v = new Value((i%maxSensor).ToString(),random.Next(maxWert).ToString());
+                Value v = new(i % maxSensor, random.Next(maxWert));
                 values.Add(v);
             }
             GridAktualisieren();
@@ -40,18 +40,31 @@ namespace SensorAuswertungWpf
 
         private void btnStatBerechnen_Click(object sender, RoutedEventArgs e)
         {
-
+            int sum = 0;
+            int min = Convert.ToInt32(txtWertMax.Text);
+            int max = 0;
+            foreach (Value v in values)
+            {
+                sum += v.Wert;
+                if( max < v.Wert)
+                {
+                    max = v.Wert;
+                }
+                if( min > v.Wert)
+                {
+                    min = v.Wert;
+                }
+            }
+            Statistik statistik = new(values.Count, min, max, sum/values.Count);
+            lbStatistik.Items.Add(statistik);
         }
 
         private void btnBeenden_Click(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
 
-        private void dataSensorID_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
-        }
         public void GridAktualisieren()
         {
             dataSensorID.ItemsSource = null;
@@ -60,19 +73,19 @@ namespace SensorAuswertungWpf
     }
     public class Value
     {
-        public string SensorId { get; set; }
-        public string Wert { get; set; }
-        public string Timestamp { get; set; }
+        public int SensorId { get; set; }
+        public int Wert { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public Value()
         {
         }
 
-        public Value(string sensorId, string wert)
+        public Value(int sensorId, int wert)
         {
             SensorId = sensorId;
             Wert = wert;
-            Timestamp = DateTime.Now.ToString();
+            Timestamp = DateTime.Now;
         }
 
     }
@@ -90,6 +103,17 @@ namespace SensorAuswertungWpf
             Minimum = minimum;
             Maximum = maximum;
             Mittelwert = mittelwert;
+            Datum = DateTime.Now;
+        }
+        public override string ToString()
+        {
+            string str = "";
+            str += "Anzahl: " + Anzahl;
+            str += "\nMinimum: " + Minimum;
+            str += "\nMaximum: " + Maximum;
+            str += "\nMittelwert: " + Mittelwert;
+            str += "\nDatum: " + Datum;
+            return str;
         }
     }
 }
