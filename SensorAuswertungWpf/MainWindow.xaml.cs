@@ -57,7 +57,6 @@ namespace SensorAuswertungWpf
             }
             Statistik statistik = new(values.Count, min, max, sum/values.Count);
             lbStatistik.Items.Add(statistik);
-            GridAktualisieren();
         }
 
         private void btnBeenden_Click(object sender, RoutedEventArgs e)
