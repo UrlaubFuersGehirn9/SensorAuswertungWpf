@@ -29,10 +29,12 @@ namespace SensorAuswertungWpf
             int Seed = Convert.ToInt32(txtSeed.Text);
             int maxSensor = Convert.ToInt32(txtSeed.Text);
             int maxWert = Convert.ToInt32(txtWertMax.Text);
+            DateTime Datum = Convert.ToDateTime(txtDatumStart.Text);
+            int interval = Convert.ToInt32(txtAnzahlTage.Text);
             Random random = new(Seed);
             for (int i = 0; i < nWerte; i++)
             {
-                Value v = new(i % maxSensor, random.Next(maxWert));
+                Value v = new(i % maxSensor, random.Next(maxWert), Datum.AddMinutes(i * interval * 24 *60 / nWerte));
                 values.Add(v);
             }
             GridAktualisieren();
@@ -88,6 +90,10 @@ namespace SensorAuswertungWpf
             Timestamp = DateTime.Now;
         }
 
+        public Value(int sensorId, int wert, DateTime timestamp) : this(sensorId, wert)
+        {
+            Timestamp = timestamp;
+        }
     }
     public class Statistik
     {
